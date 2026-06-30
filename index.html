@@ -309,7 +309,15 @@ footer.site .gold{color:var(--gold-deep)}
   width:100%;padding:11px 14px;background:var(--navy-900);border:1px solid var(--line-soft);
   border-radius:9px;color:var(--cream);font-family:'Spectral',serif;font-size:1rem;
 }
-.fld input:focus,.fld select:focus{outline:none;border-color:var(--gold-deep);background:var(--navy-700)}
+.fld textarea{
+  width:100%;padding:11px 14px;background:var(--navy-900);border:1px solid var(--line-soft);
+  border-radius:9px;color:var(--cream);font-family:'Spectral',serif;font-size:1rem;resize:vertical;line-height:1.5;min-height:80px;
+}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--gold-deep);background:var(--navy-700)}
+.edit-sec{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:24px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.edit-sec.first{margin-top:4px}
+.ficha-acoes{display:flex;gap:10px;margin-top:36px;padding-top:22px;border-top:1px solid var(--line-soft);flex-wrap:wrap}
+.ficha-del:hover{color:var(--st-futura)!important;border-color:rgba(212,95,95,.4)!important}
 .fld .hint{font-family:'Inter',sans-serif;font-size:.7rem;color:var(--muted-dim);margin-top:5px}
 .fld-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
@@ -808,7 +816,8 @@ function abrir(n){
   if(p.esboco){
     html+=`<div class="note"><div class="n-title">Ficha em construção</div>
       Esta profecia já está catalogada com sua referência no Antigo Testamento (<strong>${atRef}</strong>)${ntRef!=='—'?` e seu cumprimento/alvo (<strong>${ntRef}</strong>)`:''}.
-      A ficha completa — contexto histórico, político, espiritual e observações teológicas — ainda será desenvolvida.</div>`;
+      A ficha completa — contexto histórico, político, espiritual e observações teológicas — pode ser gerada agora pela IA, na voz da Igreja Vidas, para você conferir e aprovar.</div>
+      <div style="margin-top:18px"><button class="btn btn-gold" onclick="promover(${p.n})">✦ Gerar ficha completa com IA</button></div>`;
   } else {
     html+=`<div class="section"><div class="s-title">Profecia no Antigo Testamento</div><div class="fields">
       ${campo('Livro',at.livro,false,true)}
@@ -841,6 +850,11 @@ function abrir(n){
       </div>`;
     }
   }
+
+  html+=`<div class="ficha-acoes">
+    <button class="btn btn-line" onclick="editarFicha(${p.n})">✎ Editar ficha</button>
+    <button class="btn btn-line ficha-del" onclick="excluirFicha(${p.n})">🗑 Excluir</button>
+  </div>`;
 
   detailView.innerHTML=html;
   listView.style.display='none';
@@ -924,6 +938,16 @@ async function salvarRegistros(registros){
   if(!r.ok) throw new Error("HTTP "+r.status);
   return r.json();
 }
+async function atualizarRegistro(n, registro){
+  const r=await fetch(`${CONFIG.WORKER_URL}/atualizar`,{
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ pin:PIN_SESSAO, n, registro })
+  });
+  if(r.status===401){ PIN_SESSAO=""; throw new Error("PIN"); }
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return r.json();
+}
+let promovendoN=null;   // quando != null, a aprovação atualiza este esboço em vez de criar nova
 
 /* ——— Tela de PIN ——— */
 const PIN_HTML=`
@@ -979,9 +1003,26 @@ const FORM_HTML=`
 
 function abrirPainel(){
   fichaGerada=null;
+  promovendoN=null;
   overlay.classList.add('show');
   if(PIN_SESSAO) mostrarForm(); else telaPin(mostrarForm);
 }
+function promover(n){
+  const p=PROFECIAS.find(x=>x.n===n); if(!p) return;
+  fichaGerada=null;
+  promovendoN=n;
+  const at=p.at||{}, nt=p.nt||{};
+  const prefill={
+    tema:p.tema||'',
+    at:[at.livro,at.ref].filter(Boolean).join(' '),
+    nt:(nt.livro && nt.livro!=='—')?[nt.livro,nt.ref].filter(Boolean).join(' '):'',
+    cat:p.categoria||'messianica'
+  };
+  overlay.classList.add('show');
+  const go=()=>mostrarForm(prefill);
+  if(PIN_SESSAO) go(); else telaPin(go);
+}
+window.promover=promover;
 function mostrarForm(prefill, erro){
   panelBody.innerHTML=FORM_HTML;
   document.getElementById('g-cancel').onclick=fecharPainel;
@@ -995,7 +1036,7 @@ function mostrarForm(prefill, erro){
   if(erro){ const e=document.createElement('div'); e.className='err'; e.innerHTML=erro; panelBody.appendChild(e); }
   setTimeout(()=>document.getElementById('g-tema').focus(),60);
 }
-function fecharPainel(){ overlay.classList.remove('show'); panelBody.innerHTML=''; }
+function fecharPainel(){ overlay.classList.remove('show'); panelBody.innerHTML=''; promovendoN=null; }
 fab.onclick=abrirPainel;
 document.getElementById('panelClose').onclick=fecharPainel;
 overlay.addEventListener('click',e=>{ if(e.target===overlay) fecharPainel(); });
@@ -1074,20 +1115,28 @@ function mostrarPreview(f){
 
 async function aprovar(){
   if(!fichaGerada) return;
-  const prox=PROFECIAS.length?Math.max(...PROFECIAS.map(p=>p.n||0))+1:1;
-  fichaGerada.n=prox;
+  if(promovendoN!=null){
+    fichaGerada.n=promovendoN;          // preserva o número do esboço
+    fichaGerada.esboco=false;           // deixa de ser "a pesquisar"
+  } else {
+    fichaGerada.n=PROFECIAS.length?Math.max(...PROFECIAS.map(p=>p.n||0))+1:1;
+  }
   if(!['cumprida','parcial','duplo','messianica','futura'].includes(fichaGerada.status)) fichaGerada.status='cumprida';
   const btn=document.getElementById('pv-ok'); if(btn){ btn.disabled=true; btn.textContent='Salvando…'; }
+  const alvo=fichaGerada.n, ehPromocao=(promovendoN!=null);
   try{
-    await salvarRegistros([registroDe(fichaGerada)]);
+    if(ehPromocao) await atualizarRegistro(promovendoN, registroDe(fichaGerada));
+    else await salvarRegistros([registroDe(fichaGerada)]);
     await carregarBanco();
     fecharPainel();
-    fCategoria='todas'; fStatus=null; fBusca='';
-    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.cat==='todas'));
-    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-    document.getElementById('search').value='';
+    if(!ehPromocao){
+      fCategoria='todas'; fStatus=null; fBusca='';
+      document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.cat==='todas'));
+      document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      document.getElementById('search').value='';
+    }
     render();
-    abrir(prox);
+    abrir(alvo);
   }catch(err){
     if(String(err.message)==="PIN"){ telaPin(()=>mostrarPreview(fichaGerada)); return; }
     if(btn){ btn.disabled=false; btn.textContent='✓ Aprovar e salvar'; }
@@ -1107,6 +1156,124 @@ async function importarSeed(){
     if(String(err.message)==="PIN"){ telaPin(importarSeed); return; }
     fecharPainel();
     alert('Não consegui importar agora. Confira o porteiro (Worker) e tente de novo.');
+  }
+}
+
+/* ——— Editar e excluir fichas ——— */
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const _inp = (id,label,v)=>`<div class="fld"><label>${label}</label><input id="${id}" type="text" value="${esc(v)}"></div>`;
+const _ta  = (id,label,v)=>`<div class="fld"><label>${label}</label><textarea id="${id}" rows="3">${esc(v)}</textarea></div>`;
+const _sel = (id,label,opts,cur)=>`<div class="fld"><label>${label}</label><select id="${id}">${opts.map(o=>`<option value="${o[0]}"${o[0]===cur?' selected':''}>${o[1]}</option>`).join('')}</select></div>`;
+const _chk = (id,label,on)=>`<div class="fld"><label style="display:flex;align-items:center;gap:10px;cursor:pointer"><input id="${id}" type="checkbox"${on?' checked':''} style="width:auto;margin:0"> ${label}</label></div>`;
+let editandoN=null;
+
+function editarFicha(n){
+  const p=PROFECIAS.find(x=>x.n===n); if(!p) return;
+  const go=()=>mostrarFormEdicao(p);
+  overlay.classList.add('show');
+  if(PIN_SESSAO) go(); else telaPin(go);
+}
+window.editarFicha=editarFicha;
+
+function mostrarFormEdicao(p){
+  editandoN=p.n;
+  const at=p.at||{}, nt=p.nt||{}, obs=p.obs||{};
+  const cats=[['messianica','Messiânica'],['israel','Israel/Judá'],['nacoes','Nações'],['juizo','Juízo/Restauração'],['escatologica','Escatológica']];
+  const stats=[['cumprida','Cumprida'],['parcial','Parcial'],['duplo','Duplo'],['messianica','Messiânica'],['futura','Futura']];
+  panelBody.innerHTML=`
+    <div class="edit-sec first">Identificação</div>
+    ${_inp('e-tema','Tema',p.tema)}
+    <div class="fld-row">${_sel('e-cat','Categoria',cats,p.categoria)}${_sel('e-status','Status / cor',stats,p.status)}</div>
+    <div class="fld-row">${_inp('e-sub','Subcategoria',p.subcategoria)}${_inp('e-tipo','Tipo',p.tipo)}</div>
+    <div class="fld-row">${_inp('e-alcance','Alcance',p.alcance)}${_inp('e-intervalo','Intervalo (ponte)',p.intervalo)}</div>
+    ${_chk('e-esboco','Manter como esboço (selo "a pesquisar")',p.esboco)}
+    <div class="edit-sec">Antigo Testamento</div>
+    <div class="fld-row">${_inp('e-at-livro','Livro',at.livro)}${_inp('e-at-ref','Referência',at.ref)}</div>
+    <div class="fld-row">${_inp('e-at-profeta','Profeta',at.profeta)}${_inp('e-at-data','Data',at.data)}</div>
+    <div class="fld-row">${_inp('e-at-reino','Reino',at.reino)}${_inp('e-at-rei','Rei / governo',at.rei)}</div>
+    ${_ta('e-at-contexto','Contexto histórico e político',at.contexto)}
+    ${_ta('e-at-espiritual','Contexto espiritual',at.espiritual)}
+    <div class="edit-sec">Novo Testamento / Cumprimento</div>
+    <div class="fld-row">${_inp('e-nt-livro','Livro',nt.livro)}${_inp('e-nt-ref','Referência',nt.ref)}</div>
+    <div class="fld-row">${_inp('e-nt-governo','Governo',nt.governo)}${_inp('e-nt-imperador','Imperador',nt.imperador)}</div>
+    ${_inp('e-nt-natureza','Natureza do cumprimento',nt.natureza)}
+    ${_inp('e-nt-personagens','Personagens',nt.personagens)}
+    ${_ta('e-nt-como','Como se cumpriu',nt.como)}
+    <div class="edit-sec">Observações</div>
+    ${_ta('e-obs-imp','Importância teológica',obs.importancia)}
+    ${_inp('e-obs-rel','Profecias relacionadas',obs.relacionadas)}
+    ${_ta('e-obs-esc','Posição da Igreja Vidas (escatologia)',obs.escatologia)}
+    <div class="btn-row">
+      <button class="btn btn-gold" id="e-salvar">Salvar alterações</button>
+      <button class="btn btn-line" id="e-cancel">Cancelar</button>
+    </div>`;
+  document.getElementById('e-cancel').onclick=fecharPainel;
+  document.getElementById('e-salvar').onclick=salvarEdicao;
+  panelBody.scrollTop=0;
+}
+
+async function salvarEdicao(){
+  const v=id=>{ const el=document.getElementById(id); return el?el.value.trim():''; };
+  const n=editandoN;
+  const ficha={
+    n, tema:v('e-tema'), categoria:v('e-cat'), status:v('e-status'),
+    subcategoria:v('e-sub'), tipo:v('e-tipo'), alcance:v('e-alcance'), intervalo:v('e-intervalo'),
+    esboco:document.getElementById('e-esboco').checked,
+    at:{ livro:v('e-at-livro'),ref:v('e-at-ref'),profeta:v('e-at-profeta'),data:v('e-at-data'),reino:v('e-at-reino'),rei:v('e-at-rei'),contexto:v('e-at-contexto'),espiritual:v('e-at-espiritual') },
+    nt:{ livro:v('e-nt-livro'),ref:v('e-nt-ref'),governo:v('e-nt-governo'),imperador:v('e-nt-imperador'),natureza:v('e-nt-natureza'),personagens:v('e-nt-personagens'),como:v('e-nt-como') },
+    obs:{ importancia:v('e-obs-imp'),relacionadas:v('e-obs-rel'),escatologia:v('e-obs-esc') }
+  };
+  const btn=document.getElementById('e-salvar'); if(btn){ btn.disabled=true; btn.textContent='Salvando…'; }
+  try{
+    await atualizarRegistro(n, registroDe(ficha));
+    await carregarBanco();
+    fecharPainel();
+    render();
+    abrir(n);
+  }catch(err){
+    if(String(err.message)==='PIN'){ telaPin(()=>mostrarFormEdicao(ficha)); return; }
+    if(btn){ btn.disabled=false; btn.textContent='Salvar alterações'; }
+    const e=document.createElement('div'); e.className='err'; e.textContent='Não consegui salvar agora. Confira o porteiro (Worker) e tente de novo.';
+    panelBody.appendChild(e);
+  }
+}
+
+async function excluirRegistro(n){
+  const r=await fetch(`${CONFIG.WORKER_URL}/excluir`,{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ pin:PIN_SESSAO, n }) });
+  if(r.status===401){ PIN_SESSAO=""; throw new Error("PIN"); }
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return r.json();
+}
+function excluirFicha(n){
+  const p=PROFECIAS.find(x=>x.n===n); if(!p) return;
+  const go=()=>{
+    panelBody.innerHTML=`
+      <div class="err" style="font-size:.95rem">⚠️ <strong>Excluir esta ficha?</strong><br>Esta ação não pode ser desfeita.</div>
+      <div class="pv" style="margin-top:14px"><div class="pv-tema">${esc(p.tema)}</div><div class="pv-meta">nº ${String(p.n).padStart(2,'0')} · ${esc((CATEGORIAS.find(c=>c.id===p.categoria)||{}).nome||'')}</div></div>
+      <div class="btn-row">
+        <button class="btn" id="del-sim" style="background:var(--st-futura);color:#fff">Sim, excluir</button>
+        <button class="btn btn-line" id="del-nao">Cancelar</button>
+      </div>`;
+    document.getElementById('del-nao').onclick=fecharPainel;
+    document.getElementById('del-sim').onclick=()=>confirmarExclusao(n);
+  };
+  overlay.classList.add('show');
+  if(PIN_SESSAO) go(); else telaPin(go);
+}
+window.excluirFicha=excluirFicha;
+
+async function confirmarExclusao(n){
+  panelBody.innerHTML=`<div class="loader"><div class="spinner"></div><div class="msg">Excluindo…</div></div>`;
+  try{
+    await excluirRegistro(n);
+    await carregarBanco();
+    fecharPainel();
+    fechar();        // sai da tela de detalhe
+    irHub();         // volta ao início já atualizado
+  }catch(err){
+    if(String(err.message)==='PIN'){ telaPin(()=>excluirFicha(n)); return; }
+    fecharPainel();
+    alert('Não consegui excluir agora. Confira o porteiro (Worker) e tente de novo.');
   }
 }
 
