@@ -1,0 +1,14 @@
+{
+  "name": "Atlas das Profecias Bíblicas",
+  "short_name": "Atlas Profecias",
+  "description": "Profecias bíblicas, da promessa ao cumprimento — Igreja Vidas.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1628",
+  "theme_color": "#0A1628",
+  "icons": [
+    { "src": "./icone.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

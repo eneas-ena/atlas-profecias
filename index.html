@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas das Profecias Bíblicas</title>
+
+<!-- Ícone, favicon e tela inicial (iPhone/Android) -->
+<link rel="icon" type="image/png" href="./icone.png">
+<link rel="apple-touch-icon" href="./icone.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#0A1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Atlas Profecias">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ========================================================================
+   ATLAS DAS PROFECIAS BÍBLICAS — Igreja Vidas
+   Identidade: navy & gold. Tipografia: Cormorant (títulos),
+   Spectral (leitura), Inter (rótulos/dados).
+   ======================================================================== */
+
+:root{
+  --navy-900:#0A1628;   /* fundo */
+  --navy-800:#0E1D33;   /* superfícies */
+  --navy-700:#13243D;   /* cards */
+  --navy-600:#1B3050;   /* hover / bordas suaves */
+  --navy-500:#27405F;
+  --gold:#C9A24B;       /* dourado principal */
+  --gold-soft:#D9BE7E;  /* dourado claro */
+  --gold-deep:#9A7A2E;  /* dourado profundo p/ filetes */
+  --cream:#EDE7D8;      /* texto principal */
+  --cream-dim:#C4BCA8;  /* texto leitura suave */
+  --muted:#8295AE;      /* texto secundário azulado */
+  --muted-dim:#5E7187;
+
+  /* status / cores do Bispo */
+  --st-cumprida:#4FAE72;
+  --st-parcial:#4A8FD6;
+  --st-duplo:#E0913F;
+  --st-messianica:#A573C7;
+  --st-futura:#D45F5F;
+
+  --line:rgba(201,162,75,.18);
+  --line-soft:rgba(237,231,216,.08);
+  --radius:14px;
+  --shadow:0 18px 50px -22px rgba(0,0,0,.75);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--navy-900);
+  color:var(--cream);
+  font-family:'Spectral',Georgia,serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  background-image:
+    radial-gradient(1100px 520px at 50% -8%, rgba(201,162,75,.10), transparent 60%),
+    radial-gradient(900px 600px at 100% 110%, rgba(40,70,110,.22), transparent 55%);
+  background-attachment:fixed;
+}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+/* ---------- Cabeçalho ---------- */
+header.site{padding:46px 0 24px;text-align:center;position:relative;cursor:pointer}
+.brand-logo{width:84px;height:84px;border-radius:20px;display:block;margin:0 auto 20px;box-shadow:0 12px 32px -12px rgba(0,0,0,.7);transition:transform .25s}
+header.site:hover .brand-logo{transform:translateY(-2px)}
+.eyebrow{
+  font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:18px;
+}
+.eyebrow::before,.eyebrow::after{content:"";height:1px;width:46px;background:linear-gradient(90deg,transparent,var(--gold-deep))}
+.eyebrow::after{background:linear-gradient(90deg,var(--gold-deep),transparent)}
+h1.title{
+  font-family:'Cormorant Garamond',serif;font-weight:600;
+  font-size:clamp(2.7rem,6vw,4.4rem);line-height:1.02;color:var(--cream);
+  letter-spacing:.5px;
+}
+h1.title em{font-style:italic;color:var(--gold-soft)}
+.subtitle{
+  font-family:'Spectral',serif;font-style:italic;font-weight:400;
+  color:var(--muted);font-size:clamp(1rem,2.2vw,1.18rem);margin-top:12px;
+  max-width:640px;margin-left:auto;margin-right:auto;
+}
+.church{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted-dim);margin-top:20px}
+
+/* ---------- Busca ---------- */
+.toolbar{margin:34px 0 8px;display:flex;flex-direction:column;gap:18px}
+.search{position:relative;max-width:560px;margin:0 auto;width:100%}
+.search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);pointer-events:none}
+.search input{
+  width:100%;padding:15px 18px 15px 50px;
+  background:var(--navy-800);border:1px solid var(--line-soft);
+  border-radius:50px;color:var(--cream);font-family:'Spectral',serif;font-size:1.02rem;
+  transition:border-color .25s,box-shadow .25s,background .25s;
+}
+.search input::placeholder{color:var(--muted-dim);font-style:italic}
+.search input:focus{outline:none;border-color:var(--gold-deep);background:var(--navy-700);box-shadow:0 0 0 4px rgba(201,162,75,.10)}
+
+/* ---------- Tabs de categoria ---------- */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tab{
+  font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.04em;
+  padding:9px 18px;border-radius:50px;cursor:pointer;color:var(--muted);
+  background:transparent;border:1px solid var(--line-soft);transition:all .2s;white-space:nowrap;
+}
+.tab:hover{color:var(--cream);border-color:var(--navy-500)}
+.tab.active{color:var(--navy-900);background:var(--gold);border-color:var(--gold);font-weight:600}
+
+/* ---------- Legenda de cores ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:4px}
+.chip{
+  font-family:'Inter',sans-serif;font-size:.74rem;font-weight:500;
+  display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:50px;cursor:pointer;
+  background:var(--navy-800);border:1px solid transparent;color:var(--muted);transition:all .2s;
+}
+.chip:hover{color:var(--cream)}
+.chip .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.chip.active{border-color:currentColor;color:var(--cream);background:var(--navy-700)}
+
+/* contagem */
+.count{font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted-dim);text-align:center;letter-spacing:.05em;margin:20px 0 6px}
+
+/* ---------- Grade de cards ---------- */
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+  gap:18px;padding:14px 0 70px;
+}
+.card{
+  position:relative;background:var(--navy-700);border:1px solid var(--line-soft);
+  border-radius:var(--radius);padding:22px 22px 20px;cursor:pointer;overflow:hidden;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1),border-color .22s,box-shadow .22s;
+}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--gold));opacity:.85}
+.card:hover{transform:translateY(-4px);border-color:var(--line);box-shadow:var(--shadow)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.card-num{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:var(--gold-deep);line-height:1}
+.card .badge{
+  font-family:'Inter',sans-serif;font-size:.64rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 9px;border-radius:50px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+  background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);
+}
+.card .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.card-tema{font-family:'Cormorant Garamond',serif;font-size:1.42rem;font-weight:600;color:var(--cream);line-height:1.12;margin-bottom:14px}
+.bridge{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-size:.82rem;color:var(--muted)}
+.bridge .ref{color:var(--cream-dim);font-weight:500}
+.bridge .arrow{flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--gold-deep) 0 5px,transparent 5px 10px);opacity:.6;position:relative}
+.bridge .arrow::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:5px solid var(--gold-deep);border-top:3px solid transparent;border-bottom:3px solid transparent}
+.card-sub{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-dim);margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+.seal{
+  font-family:'Inter',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gold-soft);background:rgba(201,162,75,.10);border:1px solid var(--line);
+  padding:3px 8px;border-radius:50px;
+}
+
+/* ---------- Hub: cartões de categoria ---------- */
+.hub{padding:6px 0 70px;animation:fade .4s ease}
+.hub-intro{text-align:center;color:var(--muted);font-family:'Spectral',serif;font-style:italic;font-size:1.06rem;margin:2px auto 26px;max-width:540px}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.cat-card{
+  position:relative;background:var(--navy-700);border:1px solid var(--line-soft);border-radius:16px;
+  padding:26px 24px;cursor:pointer;overflow:hidden;min-height:150px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1),border-color .22s,box-shadow .22s;
+}
+.cat-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,var(--gold))}
+.cat-card:hover{transform:translateY(-4px);border-color:var(--line);box-shadow:var(--shadow)}
+.cat-card .cc-nome{font-family:'Cormorant Garamond',serif;font-size:1.74rem;font-weight:600;color:var(--cream);line-height:1.04}
+.cat-card .cc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:18px}
+.cat-card .cc-cont{font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted);letter-spacing:.04em}
+.cat-card .cc-cont b{color:var(--c,var(--gold));font-weight:700;font-size:1.15rem;margin-right:4px}
+.cat-card .cc-go{font-family:'Inter',sans-serif;font-size:1.2rem;color:var(--c,var(--gold));opacity:.7}
+.hub-all{text-align:center;margin-top:22px}
+.hub-all button{
+  font-family:'Inter',sans-serif;font-size:.85rem;font-weight:500;color:var(--muted);
+  background:none;border:none;cursor:pointer;letter-spacing:.04em;padding:8px 14px;border-radius:50px;transition:color .2s;
+}
+.hub-all button:hover{color:var(--gold-soft)}
+
+.tab-ini{color:var(--gold)!important;font-weight:600!important}
+.tab-ini:hover{color:var(--gold-soft)!important}
+
+/* ---------- Vazio ---------- */
+.empty{text-align:center;padding:80px 20px;color:var(--muted)}
+.empty .big{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--cream-dim);margin-bottom:8px}
+
+/* ========================================================================
+   DETALHE — a "ponte temporal" é o elemento de assinatura
+   ======================================================================== */
+.detail{display:none;padding:34px 0 90px}
+.detail.show{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.back{
+  font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;color:var(--gold);
+  background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:8px 0;margin-bottom:18px;
+}
+.back:hover{color:var(--gold-soft)}
+.detail-head{margin-bottom:8px}
+.detail-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tag{font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:5px 11px;border-radius:50px;background:var(--navy-700);color:var(--muted)}
+.tag.accent{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+.tag.gold{background:rgba(201,162,75,.14);color:var(--gold-soft)}
+.detail h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:600;color:var(--cream);line-height:1.05;margin-bottom:6px}
+.detail h2 .n{color:var(--gold-deep);margin-right:14px}
+
+/* A ponte */
+.timebridge{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;
+  margin:28px 0 32px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  background:linear-gradient(180deg,var(--navy-800),var(--navy-700));
+}
+.tb-side{padding:24px 26px}
+.tb-side .label{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+.tb-at .label{color:var(--gold)}
+.tb-nt .label{color:var(--st-cumprida)}
+.tb-side .ref{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:var(--cream);line-height:1.1}
+.tb-side .book{font-family:'Spectral',serif;font-style:italic;color:var(--muted);font-size:.95rem;margin-top:3px}
+.tb-mid{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8px;
+  background:var(--navy-900);position:relative;min-width:118px;
+}
+.tb-mid .span{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;color:var(--gold-soft);text-align:center;line-height:1.2;padding:0 6px}
+.tb-mid .glyph{font-size:1.1rem;color:var(--gold-deep);margin:8px 0}
+.tb-mid::before,.tb-mid::after{content:"";position:absolute;left:50%;width:1px;background:linear-gradient(var(--gold-deep),transparent);height:26px}
+.tb-mid::before{top:0;background:linear-gradient(transparent,var(--gold-deep))}
+.tb-mid::after{bottom:0}
+
+/* Blocos de campos */
+.section{margin-bottom:26px}
+.section > .s-title{
+  font-family:'Inter',sans-serif;font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:12px;margin-bottom:16px;
+}
+.section > .s-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:10px;overflow:hidden}
+.field{background:var(--navy-800);padding:15px 17px}
+.field .k{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-dim);margin-bottom:5px}
+.field .v{font-family:'Spectral',serif;font-size:1rem;color:var(--cream-dim);line-height:1.5}
+.field.wide{grid-column:1/-1}
+.field .v.lead{color:var(--cream)}
+
+.note{
+  background:var(--navy-800);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:10px;padding:18px 20px;font-family:'Spectral',serif;color:var(--cream-dim);font-size:1.04rem;line-height:1.65;
+}
+.note .n-title{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:8px}
+
+.eschat{border-left-color:var(--st-messianica)}
+.eschat .n-title{color:var(--st-messianica)}
+
+footer.site{border-top:1px solid var(--line-soft);padding:30px 0 50px;text-align:center;color:var(--muted-dim);font-family:'Inter',sans-serif;font-size:.74rem;letter-spacing:.05em}
+footer.site .gold{color:var(--gold-deep)}
+
+/* responsivo */
+@media(max-width:680px){
+  .timebridge{grid-template-columns:1fr}
+  .tb-mid{min-width:0;padding:14px;flex-direction:row;gap:14px}
+  .tb-mid::before,.tb-mid::after{display:none}
+  .tb-mid .glyph{margin:0}
+  .tb-at{border-bottom:1px solid var(--line)}
+  .tb-nt{border-top:1px solid var(--line)}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+
+/* ---------- Botão flutuante: gerar com IA ---------- */
+.fab{
+  position:fixed;right:22px;bottom:22px;z-index:40;
+  font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;letter-spacing:.02em;
+  display:inline-flex;align-items:center;gap:9px;padding:14px 20px;border:none;cursor:pointer;
+  border-radius:50px;color:var(--navy-900);
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+  box-shadow:0 10px 30px -8px rgba(201,162,75,.55),0 2px 0 rgba(255,255,255,.2) inset;
+  transition:transform .2s,box-shadow .2s;
+}
+.fab:hover{transform:translateY(-2px);box-shadow:0 16px 38px -10px rgba(201,162,75,.7)}
+.fab svg{width:18px;height:18px}
+
+/* ---------- Overlay / painel ---------- */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(5,11,20,.78);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:38px 16px}
+.overlay.show{display:flex;animation:fade .25s ease}
+.panel{
+  width:100%;max-width:680px;background:var(--navy-800);border:1px solid var(--line);
+  border-radius:18px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:40px;
+}
+.panel-head{padding:22px 26px 18px;border-bottom:1px solid var(--line-soft);position:relative}
+.panel-head .kicker{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.panel-head h3{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--cream);line-height:1.05}
+.panel-head .x{position:absolute;top:18px;right:20px;background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1;padding:4px}
+.panel-head .x:hover{color:var(--cream)}
+.panel-body{padding:22px 26px 26px}
+
+.test-banner{
+  font-family:'Inter',sans-serif;font-size:.78rem;line-height:1.5;color:var(--gold-soft);
+  background:rgba(201,162,75,.08);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:20px;
+}
+.test-banner strong{color:var(--cream)}
+
+.fld{margin-bottom:15px}
+.fld label{display:block;font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.fld input,.fld select{
+  width:100%;padding:11px 14px;background:var(--navy-900);border:1px solid var(--line-soft);
+  border-radius:9px;color:var(--cream);font-family:'Spectral',serif;font-size:1rem;
+}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--gold-deep);background:var(--navy-700)}
+.fld .hint{font-family:'Inter',sans-serif;font-size:.7rem;color:var(--muted-dim);margin-top:5px}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.btn{
+  font-family:'Inter',sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;border:none;
+  padding:13px 22px;border-radius:50px;transition:transform .15s,opacity .2s,background .2s;display:inline-flex;align-items:center;gap:9px;
+}
+.btn:active{transform:scale(.98)}
+.btn-gold{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:var(--navy-900)}
+.btn-gold:hover{filter:brightness(1.05)}
+.btn-ghost{background:var(--navy-700);color:var(--cream)}
+.btn-ghost:hover{background:var(--navy-600)}
+.btn-line{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn-line:hover{color:var(--cream);border-color:var(--navy-500)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+
+/* loader */
+.loader{display:flex;flex-direction:column;align-items:center;gap:16px;padding:36px 0;text-align:center}
+.spinner{width:34px;height:34px;border:3px solid var(--line-soft);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader .msg{font-family:'Spectral',serif;font-style:italic;color:var(--muted)}
+
+/* erro */
+.err{font-family:'Inter',sans-serif;font-size:.85rem;color:var(--st-futura);background:rgba(212,95,95,.1);border:1px solid rgba(212,95,95,.3);border-radius:9px;padding:12px 14px;margin-top:14px;line-height:1.5}
+
+/* preview da ficha gerada */
+.preview-head{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--st-cumprida);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.preview-head::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.pv{background:var(--navy-900);border:1px solid var(--line-soft);border-radius:12px;padding:18px 20px;max-height:46vh;overflow-y:auto;margin-bottom:18px}
+.pv .pv-tema{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--cream);line-height:1.1;margin-bottom:4px}
+.pv .pv-meta{font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted);margin-bottom:14px;letter-spacing:.03em}
+.pv .pv-blk{margin-top:14px}
+.pv .pv-blk .pv-t{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.pv .pv-line{font-family:'Spectral',serif;font-size:.95rem;color:var(--cream-dim);line-height:1.5;margin-bottom:4px}
+.pv .pv-line b{color:var(--muted);font-weight:500;font-family:'Inter',sans-serif;font-size:.74rem;letter-spacing:.04em;text-transform:uppercase;margin-right:6px}
+
+/* foco acessível */
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.card:focus-visible{outline-offset:-2px}
+</style>
+</head>
+<body>
+
+<div id="listView">
+  <header class="site wrap" id="siteHeader">
+    <img src="data:image/png;base64,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" alt="Atlas das Profecias Bíblicas" class="brand-logo">
+    <div class="eyebrow">Igreja Vidas</div>
+    <h1 class="title">Atlas das <em>Profecias</em> Bíblicas</h1>
+    <p class="subtitle">O que foi dito séculos antes, e como se cumpriu. Cada profecia, da promessa ao cumprimento, com seu contexto histórico, político e teológico.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="search" type="text" placeholder="Buscar por tema, livro, profeta ou referência…" autocomplete="off">
+      </div>
+      <div class="tabs" id="tabs"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="hub" id="hub" style="display:none"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
+
+<div class="detail wrap" id="detailView"></div>
+
+<!-- Botão flutuante: gerar com IA -->
+<button class="fab" id="fab" aria-label="Gerar nova profecia com IA">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m0 12v3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1M3 12h3m12 0h3M5.6 18.4l2.1-2.1m8.6-8.6 2.1-2.1"/></svg>
+  Nova profecia
+</button>
+
+<!-- Painel de geração -->
+<div class="overlay" id="overlay">
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
+    <div class="panel-head">
+      <div class="kicker">Gerar com IA · voz da Igreja Vidas</div>
+      <h3 id="panelTitle">Catalogar uma profecia</h3>
+      <button class="x" id="panelClose" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="panel-body" id="panelBody"><!-- preenchido via JS --></div>
+  </div>
+</div>
+
+<footer class="site wrap">
+  Atlas das Profecias Bíblicas · <span class="gold">Igreja Vidas</span> · material de estudo e consulta
+</footer>
+
+<script>
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  BANCO DE DADOS — EDITE SOMENTE DENTRO DESTE BLOCO                      ║
+   ║                                                                        ║
+   ║  Para acrescentar uma profecia, copie um objeto { ... } inteiro,       ║
+   ║  cole antes do colchete final  ]  e troque o conteúdo.                  ║
+   ║                                                                        ║
+   ║  status: "cumprida" | "parcial" | "duplo" | "messianica" | "futura"    ║
+   ║  categoria: "messianica" | "israel" | "nacoes" | "escatologica"        ║
+   ║  esboco: true  -> aparece como ficha "a pesquisar" (só o essencial)    ║
+   ╚══════════════════════════════════════════════════════════════════════╝ */
+
+const SEED = [
+
+/* ——————————————————— MESSIÂNICAS (fichas completas) ——————————————————— */
+{
+  n:1, tema:"O Messias nasceria em Belém", categoria:"messianica", subcategoria:"Nascimento",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 700 anos",
+  at:{ livro:"Miqueias", ref:"5:2", profeta:"Miqueias", data:"≈ 735–700 a.C.", reino:"Judá", rei:"Jotão, Acaz e Ezequias",
+       contexto:"A Assíria avançava sobre a Palestina e o Reino do Norte (Israel) caminhava para o cativeiro (722 a.C.). Em meio à ameaça, Miqueias anuncia um governante saído da pequena Belém.",
+       espiritual:"Idolatria, injustiça social e corrupção dos líderes religiosos e civis de Judá." },
+  nt:{ livro:"Mateus", ref:"2:1-6", como:"Jesus nasce em Belém da Judeia nos dias de Herodes; os próprios sacerdotes citam Miqueias aos magos.", personagens:"Jesus, Maria, José, Herodes, os magos", governo:"Império Romano", imperador:"César Augusto", natureza:"Literal" },
+  obs:{ importancia:"Liga o Messias à cidade de Davi e confirma sua origem davídica, ao mesmo tempo em que o texto afirma sua existência \"desde os dias da eternidade\".", relacionadas:"2 Samuel 7:12-13; Lucas 2:1-7" }
+},
+{
+  n:2, tema:"Nascido de uma virgem — Emanuel", categoria:"messianica", subcategoria:"Nascimento",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 700 anos",
+  at:{ livro:"Isaías", ref:"7:14", profeta:"Isaías", data:"≈ 734 a.C.", reino:"Judá", rei:"Acaz",
+       contexto:"Durante a guerra siro-efraimita, Acaz teme a coalizão de Síria e Israel. Isaías oferece um sinal: a virgem conceberá e dará à luz Emanuel — sinal imediato a Acaz e, em alcance pleno, ao Messias.",
+       espiritual:"Acaz rejeita confiar no Senhor e busca aliança com a Assíria; coração endurecido e incredulidade real." },
+  nt:{ livro:"Mateus", ref:"1:22-23", como:"Maria concebe pelo Espírito Santo, ainda virgem, e o menino é chamado Emanuel, \"Deus conosco\".", personagens:"Jesus, Maria, José", governo:"Império Romano", imperador:"César Augusto", natureza:"Literal (com cumprimento duplo: sinal a Acaz e plenitude em Cristo)" },
+  obs:{ importancia:"Afirma o nascimento virginal e a divindade do Messias — \"Deus conosco\" em carne.", relacionadas:"Mateus 1:18-21; Lucas 1:34-35", escatologia:"" }
+},
+{
+  n:3, tema:"Descendente de Davi, herdeiro do trono eterno", categoria:"messianica", subcategoria:"Genealogia",
+  status:"cumprida", tipo:"Messiânica (aliança davídica)", alcance:"Primeiro Advento", intervalo:"≈ 1000 anos",
+  at:{ livro:"2 Samuel", ref:"7:12-13", profeta:"Natã", data:"≈ 1000 a.C.", reino:"Israel unido", rei:"Davi",
+       contexto:"O profeta Natã transmite a Davi a aliança: sua descendência terá um trono firmado para sempre. A promessa atravessa toda a monarquia e o exílio.",
+       espiritual:"Auge do reino de Davi; desejo de edificar a casa do Senhor, respondido com a promessa de uma casa eterna para Davi." },
+  nt:{ livro:"Lucas", ref:"1:32-33", como:"O anjo anuncia a Maria que o filho receberá o trono de Davi, seu pai, e reinará para sempre.", personagens:"Jesus, Maria, anjo Gabriel", governo:"Império Romano", imperador:"César Augusto", natureza:"Literal e em curso (reinado eterno)" },
+  obs:{ importancia:"Estabelece a base da realeza messiânica: Jesus é o Filho de Davi prometido, cujo reino não terá fim.", relacionadas:"Isaías 9:6-7; Jeremias 23:5; Mateus 1:1" }
+},
+{
+  n:4, tema:"Um precursor prepararia o caminho", categoria:"messianica", subcategoria:"Ministério",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 400 anos",
+  at:{ livro:"Malaquias", ref:"3:1", profeta:"Malaquias", data:"≈ 430 a.C.", reino:"Judá (província persa de Iáude)", rei:"Domínio persa",
+       contexto:"Último profeta do Antigo Testamento. Anuncia o mensageiro que prepararia o caminho diante do Senhor — eco de Isaías 40:3.",
+       espiritual:"Pós-exílio: sacerdócio negligente, dízimos retidos, casamentos mistos e desânimo espiritual em Judá." },
+  nt:{ livro:"Mateus", ref:"3:1-3", como:"João Batista surge no deserto pregando arrependimento e preparando o caminho, citando Isaías 40.", personagens:"João Batista, Jesus", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"O próprio Jesus identifica João como o mensageiro anunciado e o \"Elias que havia de vir\".", relacionadas:"Isaías 40:3; Malaquias 4:5-6; Mateus 11:10-14" }
+},
+{
+  n:5, tema:"Entrada triunfal montado num jumentinho", categoria:"messianica", subcategoria:"Entrada em Jerusalém",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 500 anos",
+  at:{ livro:"Zacarias", ref:"9:9", profeta:"Zacarias", data:"≈ 520–518 a.C.", reino:"Judá (período persa)", rei:"Dario I",
+       contexto:"No esforço de reconstrução do templo, Zacarias anuncia um rei justo, humilde e salvador, que entra em Jerusalém montado num jumento — não num cavalo de guerra.",
+       espiritual:"Reconstrução do templo e renovação da esperança messiânica entre os repatriados." },
+  nt:{ livro:"Mateus", ref:"21:1-9", como:"Jesus entra em Jerusalém sobre um jumentinho, aclamado pela multidão com ramos e hosanas.", personagens:"Jesus, discípulos, multidão", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"Apresenta o Messias como Rei manso e pacífico, cumprindo o gesto exato anunciado por Zacarias.", relacionadas:"Salmo 118:25-26; João 12:12-16" }
+},
+{
+  n:6, tema:"Traído por um amigo próximo", categoria:"messianica", subcategoria:"Traição",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 1000 anos",
+  at:{ livro:"Salmos", ref:"41:9", profeta:"Davi", data:"≈ 1000 a.C.", reino:"Israel unido", rei:"Davi",
+       contexto:"Davi lamenta a traição de um amigo de confiança, que partilhava do seu pão. O sofrimento do justo prefigura o do Messias.",
+       espiritual:"Salmo de lamento; experiência pessoal de Davi elevada a tipo profético do Justo traído." },
+  nt:{ livro:"João", ref:"13:18-21", como:"Jesus aplica o salmo a Judas Iscariotes, que come com Ele e o entrega.", personagens:"Jesus, Judas Iscariotes, discípulos", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"O próprio Cristo cita o salmo para mostrar que a traição não o pegou de surpresa, mas cumpria a Escritura.", relacionadas:"Salmo 55:12-14; Mateus 26:21-25" }
+},
+{
+  n:7, tema:"Vendido por trinta moedas de prata", categoria:"messianica", subcategoria:"Traição",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 500 anos",
+  at:{ livro:"Zacarias", ref:"11:12-13", profeta:"Zacarias", data:"≈ 520–480 a.C.", reino:"Judá (período persa)", rei:"Domínio persa",
+       contexto:"Em uma parábola profética do pastor rejeitado, fixa-se o salário desprezível: trinta moedas de prata, lançadas na casa do Senhor ao oleiro.",
+       espiritual:"Denúncia da rejeição do verdadeiro Pastor pelo povo e seus líderes." },
+  nt:{ livro:"Mateus", ref:"26:14-15; 27:3-10", como:"Judas recebe trinta moedas de prata; arrependido, lança-as no templo, e com elas se compra o campo do oleiro.", personagens:"Judas, sacerdotes, Jesus", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal (detalhes exatos: valor, prata, oleiro, templo)" },
+  obs:{ importancia:"Precisão impressionante: o valor, o metal, o destino do dinheiro e o campo do oleiro coincidem.", relacionadas:"Êxodo 21:32; Mateus 27:9-10" }
+},
+{
+  n:8, tema:"Silencioso diante dos acusadores", categoria:"messianica", subcategoria:"Julgamento",
+  status:"cumprida", tipo:"Messiânica (Servo Sofredor)", alcance:"Primeiro Advento", intervalo:"≈ 700 anos",
+  at:{ livro:"Isaías", ref:"53:7", profeta:"Isaías", data:"≈ 700 a.C.", reino:"Judá", rei:"Ezequias / Manassés",
+       contexto:"O quarto cântico do Servo descreve aquele que, oprimido e afligido, não abre a boca — como cordeiro levado ao matadouro.",
+       espiritual:"Visão profética do sofrimento vicário do Servo do Senhor pelos pecados do povo." },
+  nt:{ livro:"Mateus", ref:"27:12-14", como:"Diante de Pilatos e dos acusadores, Jesus permanece em silêncio, ao ponto de o governador se admirar.", personagens:"Jesus, Pilatos, sacerdotes", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"O silêncio do Justo manifesta sua entrega voluntária; Ele não se defende porque veio para morrer.", relacionadas:"Isaías 53:1-9; Marcos 15:3-5; 1 Pedro 2:23" }
+},
+{
+  n:9, tema:"Mãos e pés traspassados", categoria:"messianica", subcategoria:"Crucificação",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 1000 anos",
+  at:{ livro:"Salmos", ref:"22:16", profeta:"Davi", data:"≈ 1000 a.C.", reino:"Israel unido", rei:"Davi",
+       contexto:"O Salmo 22 descreve um sofrimento extremo séculos antes de a crucificação existir como pena romana: \"traspassaram-me as mãos e os pés\".",
+       espiritual:"Lamento do justo abandonado, lido messianicamente já pela tradição cristã primitiva." },
+  nt:{ livro:"João", ref:"20:25-27", como:"Jesus é crucificado; após a ressurreição, mostra a Tomé as marcas dos cravos nas mãos.", personagens:"Jesus, Tomé, soldados romanos", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"O salmo antecipa a crucificação muito antes de Roma adotá-la como execução, e Jesus o cita na cruz (v.1).", relacionadas:"Salmo 22:1; Lucas 23:33; Zacarias 12:10" }
+},
+{
+  n:10, tema:"Repartiram suas vestes, lançando sortes", categoria:"messianica", subcategoria:"Crucificação",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 1000 anos",
+  at:{ livro:"Salmos", ref:"22:18", profeta:"Davi", data:"≈ 1000 a.C.", reino:"Israel unido", rei:"Davi",
+       contexto:"No mesmo salmo do sofrimento, detalha-se: repartem as vestes entre si e sobre a túnica lançam sortes.",
+       espiritual:"Continuação do lamento do justo, rico em pormenores cumpridos na paixão." },
+  nt:{ livro:"João", ref:"19:23-24", como:"Os soldados dividem as roupas de Jesus e, pela túnica inteiriça, lançam sortes — citando o salmo.", personagens:"Jesus, soldados romanos", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"João aponta o gesto dos soldados como cumprimento explícito da Escritura.", relacionadas:"Salmo 22:16-18; Mateus 27:35" }
+},
+{
+  n:11, tema:"Nenhum dos seus ossos seria quebrado", categoria:"messianica", subcategoria:"Crucificação",
+  status:"cumprida", tipo:"Messiânica / tipológica", alcance:"Primeiro Advento", intervalo:"≈ 1000+ anos",
+  at:{ livro:"Salmos", ref:"34:20", profeta:"Davi", data:"≈ 1000 a.C.", reino:"Israel unido", rei:"Davi",
+       contexto:"\"Ele guarda todos os seus ossos; nem sequer um deles se quebra.\" Soma-se à regra do cordeiro pascal, cujos ossos não podiam ser partidos (Êxodo 12:46).",
+       espiritual:"Tipologia do Cordeiro de Deus já presente na Páscoa e no cuidado de Deus para com o justo." },
+  nt:{ livro:"João", ref:"19:33-36", como:"Os soldados não quebram as pernas de Jesus, pois já estava morto — cumprindo a Escritura.", personagens:"Jesus, soldados romanos", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"Confirma Jesus como o verdadeiro Cordeiro pascal, sem osso quebrado.", relacionadas:"Êxodo 12:46; Números 9:12; 1 Coríntios 5:7" }
+},
+{
+  n:12, tema:"Sepultado entre os ricos", categoria:"messianica", subcategoria:"Crucificação",
+  status:"cumprida", tipo:"Messiânica (Servo Sofredor)", alcance:"Primeiro Advento", intervalo:"≈ 700 anos",
+  at:{ livro:"Isaías", ref:"53:9", profeta:"Isaías", data:"≈ 700 a.C.", reino:"Judá", rei:"Ezequias / Manassés",
+       contexto:"O Servo, embora destinado à sepultura com os ímpios, terá sua tumba com os ricos — pois não cometeu violência nem houve engano em sua boca.",
+       espiritual:"Antecipação da reabilitação do Justo inocente mesmo na morte." },
+  nt:{ livro:"Mateus", ref:"27:57-60", como:"José de Arimateia, homem rico, sepulta Jesus em seu próprio túmulo novo.", personagens:"Jesus, José de Arimateia, Nicodemos", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"Mesmo na morte de criminoso, Jesus recebe sepultura honrosa, cumprindo o detalhe de Isaías.", relacionadas:"Isaías 53:9; João 19:38-42" }
+},
+{
+  n:13, tema:"Ressuscitaria — não veria corrupção", categoria:"messianica", subcategoria:"Ressurreição",
+  status:"cumprida", tipo:"Messiânica", alcance:"Primeiro Advento", intervalo:"≈ 1000 anos",
+  at:{ livro:"Salmos", ref:"16:10", profeta:"Davi", data:"≈ 1000 a.C.", reino:"Israel unido", rei:"Davi",
+       contexto:"\"Não deixarás a minha alma no inferno, nem permitirás que o teu Santo veja corrupção.\" Davi morreu e foi sepultado — logo, fala de Outro.",
+       espiritual:"Confiança do justo na vitória sobre a morte, lida apostolicamente como profecia da ressurreição." },
+  nt:{ livro:"Atos", ref:"2:25-32", como:"Pedro, em Pentecostes, declara que Davi falava de Cristo, ressuscitado e isento de corrupção.", personagens:"Pedro, os apóstolos, multidão", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"Fundamento apostólico da ressurreição: o túmulo de Davi permanece, mas o de Cristo está vazio.", relacionadas:"Atos 13:35-37; Salmo 16:8-11" }
+},
+{
+  n:14, tema:"Ascensão e assento à direita de Deus", categoria:"messianica", subcategoria:"Ascensão",
+  status:"cumprida", tipo:"Messiânica (entronização)", alcance:"Primeiro Advento", intervalo:"≈ 1000 anos",
+  at:{ livro:"Salmos", ref:"110:1", profeta:"Davi", data:"≈ 1000 a.C.", reino:"Israel unido", rei:"Davi",
+       contexto:"\"Disse o Senhor ao meu Senhor: Assenta-te à minha direita.\" Davi chama o Messias de Senhor, anunciando sua exaltação.",
+       espiritual:"Salmo real-sacerdotal, o mais citado no Novo Testamento, sobre a entronização do Messias." },
+  nt:{ livro:"Atos", ref:"1:9-11", como:"Após ressuscitar, Jesus ascende ao céu diante dos discípulos e assenta-se à direita do Pai.", personagens:"Jesus, apóstolos, anjos", governo:"Império Romano", imperador:"Tibério César", natureza:"Literal" },
+  obs:{ importancia:"Confirma a exaltação e o senhorio de Cristo; o próprio Jesus usa o salmo para desafiar os fariseus.", relacionadas:"Mateus 22:41-45; Hebreus 1:13; Efésios 4:8" }
+},
+{
+  n:15, tema:"Levou sobre si as nossas dores", categoria:"messianica", subcategoria:"Ministério",
+  status:"cumprida", tipo:"Messiânica (Servo Sofredor)", alcance:"Primeiro Advento", intervalo:"≈ 700 anos",
+  at:{ livro:"Isaías", ref:"53:4-6", profeta:"Isaías", data:"≈ 700 a.C.", reino:"Judá", rei:"Ezequias / Manassés",
+       contexto:"O coração do quarto cântico do Servo: Ele tomou sobre si as nossas enfermidades, foi ferido pelas nossas transgressões, e o Senhor fez cair sobre Ele a iniquidade de todos nós.",
+       espiritual:"Núcleo da teologia da expiação substitutiva no Antigo Testamento." },
+  nt:{ livro:"1 Pedro", ref:"2:24", como:"Pedro declara que Cristo levou em seu corpo os nossos pecados sobre o madeiro; por suas feridas fomos sarados.", personagens:"Jesus (aplicação apostólica)", governo:"Império Romano", imperador:"—", natureza:"Literal / teológico" },
+  obs:{ importancia:"Texto central do sofrimento vicário: a base do evangelho da substituição.", relacionadas:"Isaías 53:1-12; Mateus 8:16-17; 2 Coríntios 5:21" }
+},
+
+/* ——————————————————— ISRAEL (esboços — a pesquisar) ——————————————————— */
+{ n:16, tema:"A dispersão de Israel entre as nações", categoria:"israel", subcategoria:"Dispersão", status:"cumprida", esboco:true,
+  at:{ livro:"Deuteronômio", ref:"28:64-65", profeta:"Moisés" }, nt:{ livro:"Lucas", ref:"21:24" } },
+{ n:17, tema:"Setenta anos de cativeiro na Babilônia", categoria:"israel", subcategoria:"Cativeiro", status:"cumprida", esboco:true,
+  at:{ livro:"Jeremias", ref:"25:11-12", profeta:"Jeremias" }, nt:{ livro:"Daniel", ref:"9:1-2" } },
+{ n:18, tema:"O retorno do exílio babilônico", categoria:"israel", subcategoria:"Retorno", status:"cumprida", esboco:true,
+  at:{ livro:"Jeremias", ref:"29:10", profeta:"Jeremias" }, nt:{ livro:"Esdras", ref:"1:1-4" } },
+{ n:19, tema:"O vale dos ossos secos — restauração nacional", categoria:"israel", subcategoria:"Restauração", status:"parcial", esboco:true,
+  at:{ livro:"Ezequiel", ref:"37:1-14", profeta:"Ezequiel" }, nt:{ livro:"—", ref:"em curso" } },
+{ n:20, tema:"Reunião de Israel de todas as terras", categoria:"israel", subcategoria:"Restauração", status:"parcial", esboco:true,
+  at:{ livro:"Ezequiel", ref:"36:24", profeta:"Ezequiel" }, nt:{ livro:"—", ref:"em curso" } },
+{ n:21, tema:"Jerusalém pisada pelos gentios", categoria:"israel", subcategoria:"Jerusalém", status:"duplo", esboco:true,
+  at:{ livro:"Lucas", ref:"21:24", profeta:"Jesus" }, nt:{ livro:"Apocalipse", ref:"11:2" } },
+
+/* ——————————————————— NAÇÕES (esboços — a pesquisar) ——————————————————— */
+{ n:22, tema:"A queda definitiva da Babilônia", categoria:"nacoes", subcategoria:"Babilônia", status:"cumprida", esboco:true,
+  at:{ livro:"Isaías", ref:"13:19-22", profeta:"Isaías" }, nt:{ livro:"Jeremias", ref:"51:37" } },
+{ n:23, tema:"A destruição de Tiro", categoria:"nacoes", subcategoria:"Tiro", status:"cumprida", esboco:true,
+  at:{ livro:"Ezequiel", ref:"26:3-14", profeta:"Ezequiel" }, nt:{ livro:"—", ref:"história" } },
+{ n:24, tema:"A desolação do Egito", categoria:"nacoes", subcategoria:"Egito", status:"cumprida", esboco:true,
+  at:{ livro:"Ezequiel", ref:"29:1-16", profeta:"Ezequiel" }, nt:{ livro:"—", ref:"história" } },
+{ n:25, tema:"Edom reduzido a deserto perpétuo", categoria:"nacoes", subcategoria:"Edom", status:"cumprida", esboco:true,
+  at:{ livro:"Obadias", ref:"1:18", profeta:"Obadias" }, nt:{ livro:"—", ref:"história" } },
+{ n:26, tema:"A queda de Nínive (Assíria)", categoria:"nacoes", subcategoria:"Assíria", status:"cumprida", esboco:true,
+  at:{ livro:"Naum", ref:"1:1-3:19", profeta:"Naum" }, nt:{ livro:"—", ref:"história" } },
+{ n:27, tema:"Os quatro impérios mundiais", categoria:"nacoes", subcategoria:"Impérios", status:"duplo", esboco:true,
+  at:{ livro:"Daniel", ref:"2:31-45", profeta:"Daniel" }, nt:{ livro:"Daniel", ref:"7:1-28" } },
+
+/* ——————————————————— ESCATOLÓGICAS (esboços — a pesquisar) ——————————————————— */
+{ n:28, tema:"A segunda vinda de Cristo", categoria:"escatologica", subcategoria:"Segunda Vinda", status:"futura", esboco:true,
+  at:{ livro:"Zacarias", ref:"14:4", profeta:"Zacarias" }, nt:{ livro:"Atos", ref:"1:11" } },
+{ n:29, tema:"A ressurreição dos mortos", categoria:"escatologica", subcategoria:"Ressurreição", status:"futura", esboco:true,
+  at:{ livro:"Daniel", ref:"12:2", profeta:"Daniel" }, nt:{ livro:"1 Tessalonicenses", ref:"4:16" } },
+{ n:30, tema:"O juízo final diante do grande trono branco", categoria:"escatologica", subcategoria:"Juízo Final", status:"futura", esboco:true,
+  at:{ livro:"Daniel", ref:"7:9-10", profeta:"Daniel" }, nt:{ livro:"Apocalipse", ref:"20:11-15" } },
+{ n:31, tema:"O homem da iniquidade (anticristo)", categoria:"escatologica", subcategoria:"Anticristo", status:"futura", esboco:true,
+  at:{ livro:"Daniel", ref:"9:27", profeta:"Daniel" }, nt:{ livro:"2 Tessalonicenses", ref:"2:3-4" } },
+{ n:32, tema:"Novo céu e nova terra", categoria:"escatologica", subcategoria:"Novo Céu", status:"futura", esboco:true,
+  at:{ livro:"Isaías", ref:"65:17", profeta:"Isaías" }, nt:{ livro:"Apocalipse", ref:"21:1" } },
+{ n:33, tema:"A Nova Jerusalém", categoria:"escatologica", subcategoria:"Nova Jerusalém", status:"futura", esboco:true,
+  at:{ livro:"Isaías", ref:"60:1-22", profeta:"Isaías" }, nt:{ livro:"Apocalipse", ref:"21:2-27" } },
+{ n:34, tema:"A grande tribulação", categoria:"escatologica", subcategoria:"Tribulação", status:"futura", esboco:true,
+  at:{ livro:"Daniel", ref:"12:1", profeta:"Daniel" }, nt:{ livro:"Mateus", ref:"24:21" } }
+
+/* ╚══════════════════ FIM DO BANCO DE DADOS — NÃO MEXA ABAIXO ══════════════╝ */
+];
+
+/* ── Conexão (preenchido por Claude) ── */
+const CONFIG = {
+  WORKER_URL:   "https://atlas-profecias.eneaspr.workers.dev",
+  SUPABASE_URL: "https://ghjbljypxksubmcsvaig.supabase.co",
+  SUPABASE_KEY: "sb_publishable_qXCYqg1WdmelY9D1mptZXg_U8NdoKby"
+};
+
+// Atlas em memória: carregado do banco no início (cai no SEED se faltar internet)
+let PROFECIAS = [];
+let MODO_OFFLINE = false;
+let PIN_SESSAO = "";   // guardado só durante a sessão, nunca salvo
+
+// ——— categorias (navegação) e status (cores) ———
+const CATEGORIAS = [
+  { id:"messianica",   nome:"Messiânicas",       cor:"var(--st-messianica)" },
+  { id:"israel",       nome:"Israel/Judá",       cor:"var(--st-cumprida)" },
+  { id:"nacoes",       nome:"Nações",            cor:"var(--st-duplo)" },
+  { id:"juizo",        nome:"Juízo/Restauração", cor:"var(--st-parcial)" },
+  { id:"escatologica", nome:"Escatológicas",     cor:"var(--st-futura)" }
+];
+const STATUS = {
+  cumprida:   { nome:"Cumprida",        cor:"var(--st-cumprida)" },
+  parcial:    { nome:"Cumprim. parcial",cor:"var(--st-parcial)" },
+  duplo:      { nome:"Duplo cumprim.",  cor:"var(--st-duplo)" },
+  messianica: { nome:"Messiânica",      cor:"var(--st-messianica)" },
+  futura:     { nome:"Futura",          cor:"var(--st-futura)" }
+};
+
+// ——— estado ———
+let fCategoria = null;   // null = tela inicial (hub)
+let fStatus = null;
+let fBusca = "";
+
+// ——— montagem dos filtros ———
+const tabsEl = document.getElementById('tabs');
+function irHub(){ fCategoria=null; fStatus=null; fBusca=""; const s=document.getElementById('search'); if(s) s.value=""; document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active')); render(); }
+function selecionar(id){ fCategoria=id; render(); }
+function montarAbas(){
+  tabsEl.innerHTML='';
+  const ini=document.createElement('button'); ini.className='tab tab-ini'; ini.innerHTML='‹ Início'; ini.onclick=irHub; tabsEl.appendChild(ini);
+  CATEGORIAS.forEach(c=>{
+    const b=document.createElement('button'); b.className='tab'; b.textContent=c.nome; b.dataset.cat=c.id;
+    b.onclick=()=>selecionar(c.id); tabsEl.appendChild(b);
+  });
+  const all=document.createElement('button'); all.className='tab'; all.textContent='Todas'; all.dataset.cat='todas'; all.onclick=()=>selecionar('todas'); tabsEl.appendChild(all);
+}
+montarAbas();
+const legendEl = document.getElementById('legend');
+Object.entries(STATUS).forEach(([id,s])=>{
+  const c=document.createElement('button');
+  c.className='chip'; c.dataset.st=id; c.style.color=s.cor;
+  c.innerHTML=`<span class="dot" style="background:${s.cor}"></span>${s.nome}`;
+  c.onclick=()=>{ fStatus = (fStatus===id? null : id);
+    document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x.dataset.st===fStatus)); render(); };
+  legendEl.appendChild(c);
+});
+document.getElementById('search').addEventListener('input',e=>{ fBusca=e.target.value.toLowerCase().trim(); render(); });
+const siteHeader=document.getElementById('siteHeader'); if(siteHeader) siteHeader.onclick=irHub;
+
+// ——— renderização da lista ———
+const gridEl = document.getElementById('grid');
+const hubEl  = document.getElementById('hub');
+const countEl = document.getElementById('count');
+const legendEl2 = document.getElementById('legend');
+
+function filtra(){
+  return PROFECIAS.filter(p=>{
+    if(fCategoria && fCategoria!=='todas' && p.categoria!==fCategoria) return false;
+    if(fStatus && p.status!==fStatus) return false;
+    if(fBusca){
+      const blob=[p.tema,p.subcategoria,p.at?.livro,p.at?.ref,p.at?.profeta,p.nt?.livro,p.nt?.ref].join(' ').toLowerCase();
+      if(!blob.includes(fBusca)) return false;
+    }
+    return true;
+  });
+}
+
+function renderHub(){
+  hubEl.style.display='block';
+  gridEl.style.display='none';
+  const cards = CATEGORIAS.map(c=>{
+    const n = PROFECIAS.filter(p=>p.categoria===c.id).length;
+    return `<div class="cat-card" style="--c:${c.cor}" tabindex="0" data-cat="${c.id}">
+      <div class="cc-nome">${c.nome}</div>
+      <div class="cc-foot">
+        <div class="cc-cont"><b>${n}</b>${n===1?'profecia':'profecias'}</div>
+        <div class="cc-go">›</div>
+      </div>
+    </div>`;
+  }).join('');
+  hubEl.innerHTML=`
+    <div class="hub-intro">Escolha um caminho de estudo ou busque uma profecia pelo nome, livro ou referência.</div>
+    <div class="cat-grid">${cards}</div>
+    <div class="hub-all"><button id="ver-todas">Ver todas as ${PROFECIAS.length} profecias ›</button></div>`;
+  hubEl.querySelectorAll('.cat-card').forEach(el=>{
+    const go=()=>selecionar(el.dataset.cat);
+    el.onclick=go;
+    el.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();go();} };
+  });
+  const vt=document.getElementById('ver-todas'); if(vt) vt.onclick=()=>selecionar('todas');
+}
+
+function render(){
+  // Banco conectado, porém ainda vazio → convida a importar as fichas iniciais
+  if(PROFECIAS.length===0 && !MODO_OFFLINE){
+    hubEl.style.display='none'; gridEl.style.display='grid';
+    tabsEl.style.display='none'; if(legendEl2) legendEl2.style.display='none';
+    countEl.textContent='';
+    gridEl.innerHTML=`<div class="empty" style="grid-column:1/-1">
+      <div class="big">Seu atlas está pronto, mas ainda vazio</div>
+      <div style="margin-bottom:22px">Importe as 34 fichas iniciais — 15 messiânicas completas e os esboços por categoria — para começar.</div>
+      <button class="btn btn-gold" id="seed-btn" style="margin:0 auto">Importar as 34 fichas iniciais</button>
+    </div>`;
+    const sb=document.getElementById('seed-btn');
+    if(sb) sb.onclick=()=>{ overlay.classList.add('show'); if(PIN_SESSAO) importarSeed(); else telaPin(importarSeed); };
+    return;
+  }
+
+  const noHub = (fCategoria===null && !fBusca);
+  // abas e legenda só aparecem dentro de uma "página"; na tela inicial somem
+  tabsEl.style.display = noHub ? 'none' : 'flex';
+  if(legendEl2) legendEl2.style.display = noHub ? 'none' : 'flex';
+
+  if(noHub){ countEl.textContent=''; renderHub(); return; }
+
+  // marca a aba ativa
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.cat===(fCategoria||'todas')));
+
+  hubEl.style.display='none'; gridEl.style.display='grid';
+  const lista=filtra();
+  const aviso = MODO_OFFLINE ? 'modo offline · ' : '';
+  const nomeCat = (fCategoria && fCategoria!=='todas') ? ` · ${(CATEGORIAS.find(c=>c.id===fCategoria)||{}).nome||''}` : '';
+  countEl.textContent = lista.length===0 ? '' :
+    aviso+`${lista.length} ${lista.length===1?'profecia':'profecias'}`+nomeCat;
+  if(lista.length===0){
+    gridEl.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="big">Nada encontrado</div><div>Tente outro termo, categoria ou cor.</div></div>`;
+    return;
+  }
+  gridEl.innerHTML = lista.map(p=>{
+    const st=STATUS[p.status]||STATUS.cumprida;
+    const at=p.at||{}, nt=p.nt||{};
+    const atRef=[at.livro,at.ref].filter(Boolean).join(' ')||'—';
+    const ntRef=(nt.livro==='—'?nt.ref:[nt.livro,nt.ref].filter(Boolean).join(' '))||'—';
+    return `<article class="card" style="--accent:${st.cor}" tabindex="0" data-n="${p.n}">
+      <div class="card-top">
+        <span class="card-num">${String(p.n).padStart(2,'0')}</span>
+        <span class="badge"><span class="dot"></span>${st.nome}</span>
+      </div>
+      <h3 class="card-tema">${p.tema||'—'}</h3>
+      <div class="bridge"><span class="ref">${atRef}</span><span class="arrow"></span><span class="ref">${ntRef}</span></div>
+      <div class="card-sub">
+        <span>${p.subcategoria||''}</span>
+        ${p.esboco?'<span class="seal">a pesquisar</span>':''}
+      </div>
+    </article>`;
+  }).join('');
+  document.querySelectorAll('.card').forEach(c=>{
+    const open=()=>abrir(+c.dataset.n);
+    c.onclick=open;
+    c.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open();} };
+  });
+}
+
+// ——— detalhe (a ponte temporal) ———
+const listView=document.getElementById('listView');
+const detailView=document.getElementById('detailView');
+
+function campo(k,v,wide,lead){ if(!v) return ''; return `<div class="field${wide?' wide':''}"><div class="k">${k}</div><div class="v${lead?' lead':''}">${v}</div></div>`; }
+
+function abrir(n){
+  const p=PROFECIAS.find(x=>x.n===n); if(!p) return;
+  const st=STATUS[p.status]||STATUS.cumprida;
+  const cor=st.cor;
+  const at=p.at||{}, nt=p.nt||{}, obsv=p.obs;
+  const atRef=[at.livro,at.ref].filter(Boolean).join(' ')||'—';
+  const ntRef=(nt.livro==='—'||!nt.livro)?(nt.ref||'—'):[nt.livro,nt.ref].filter(Boolean).join(' ');
+
+  let html=`<button class="back" onclick="fechar()">&larr; Voltar ao atlas</button>
+    <div class="detail-head" style="--accent:${cor}">
+      <div class="detail-meta">
+        <span class="tag accent">${st.nome}</span>
+        ${p.tipo?`<span class="tag">${p.tipo}</span>`:''}
+        ${p.alcance?`<span class="tag gold">${p.alcance}</span>`:''}
+        ${p.esboco?'<span class="tag">Ficha a pesquisar</span>':''}
+      </div>
+      <h2><span class="n">${String(p.n).padStart(2,'0')}</span>${p.tema}</h2>
+    </div>
+
+    <div class="timebridge">
+      <div class="tb-side tb-at">
+        <div class="label">Profecia · Antigo Testamento</div>
+        <div class="ref">${atRef}</div>
+        <div class="book">${at.profeta?'pela voz de '+at.profeta:''}${at.data?' · '+at.data:''}</div>
+      </div>
+      <div class="tb-mid">
+        <div class="glyph">✦</div>
+        <div class="span">${p.intervalo||'cumprida'}<br><span style="font-size:.78rem;color:var(--muted)">depois</span></div>
+        <div class="glyph">✦</div>
+      </div>
+      <div class="tb-side tb-nt">
+        <div class="label">Cumprimento · Novo Testamento</div>
+        <div class="ref">${ntRef}</div>
+        <div class="book">${nt.imperador&&nt.imperador!=='—'?'sob '+nt.imperador:(nt.governo||'')}</div>
+      </div>
+    </div>`;
+
+  if(p.esboco){
+    html+=`<div class="note"><div class="n-title">Ficha em construção</div>
+      Esta profecia já está catalogada com sua referência no Antigo Testamento (<strong>${atRef}</strong>)${ntRef!=='—'?` e seu cumprimento/alvo (<strong>${ntRef}</strong>)`:''}.
+      A ficha completa — contexto histórico, político, espiritual e observações teológicas — ainda será desenvolvida.</div>`;
+  } else {
+    html+=`<div class="section"><div class="s-title">Profecia no Antigo Testamento</div><div class="fields">
+      ${campo('Livro',at.livro,false,true)}
+      ${campo('Referência',at.ref)}
+      ${campo('Profeta',at.profeta)}
+      ${campo('Data aproximada',at.data)}
+      ${campo('Reino',at.reino)}
+      ${campo('Rei / governo',at.rei)}
+      ${campo('Tipo da profecia',p.tipo)}
+      ${campo('Alcance',p.alcance)}
+      ${campo('Contexto histórico e político',at.contexto,true)}
+      ${campo('Contexto espiritual',at.espiritual,true)}
+    </div></div>
+
+    <div class="section"><div class="s-title">Cumprimento no Novo Testamento</div><div class="fields">
+      ${campo('Livro',nt.livro,false,true)}
+      ${campo('Referência',nt.ref)}
+      ${campo('Governo',nt.governo)}
+      ${campo('Imperador',nt.imperador)}
+      ${campo('Natureza do cumprimento',nt.natureza)}
+      ${campo('Personagens',nt.personagens,true)}
+      ${campo('Como se cumpriu',nt.como,true,true)}
+    </div></div>`;
+
+    if(obsv){
+      html+=`<div class="section"><div class="s-title">Observações teológicas</div>
+        ${obsv.importancia?`<div class="note"><div class="n-title">Importância teológica</div>${obsv.importancia}</div>`:''}
+        ${obsv.relacionadas?`<div class="field wide" style="margin-top:14px;border:1px solid var(--line-soft);border-radius:10px"><div class="k">Profecias relacionadas</div><div class="v">${obsv.relacionadas}</div></div>`:''}
+        ${obsv.escatologia?`<div class="note eschat" style="margin-top:14px"><div class="n-title">Posição da Igreja Vidas</div>${obsv.escatologia}</div>`:''}
+      </div>`;
+    }
+  }
+
+  detailView.innerHTML=html;
+  listView.style.display='none';
+  detailView.classList.add('show');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function fechar(){
+  detailView.classList.remove('show');
+  detailView.innerHTML='';
+  listView.style.display='block';
+  window.scrollTo({top:0,behavior:'instant'});
+}
+window.fechar=fechar;
+
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  MÓDULO: GERAR FICHA COM IA  (voz teológica da Igreja Vidas)           ║
+   ║  Etapa 1 — validação: a ficha aprovada entra só nesta sessão.         ║
+   ║  Etapa 2 — Supabase + proxy fará a persistência (próximo passo).      ║
+   ╚══════════════════════════════════════════════════════════════════════╝ */
+
+const SYSTEM_FICHA = `Você é "Teologia em Minutos", assistente de Bíblia e Teologia da Igreja Vidas.
+Linha teológica: evangélica, conservadora, cristocêntrica, bíblica e Batista tradicional.
+Dons espirituais: continuísta equilibrado. Batismo: de crentes, por imersão.
+ESCATOLOGIA: amilenista, cristocêntrica, canônica e equilibrada — sem marcar datas, sem especulação e sem interpretações conspiratórias. Em Apocalipse, priorize a leitura amilenista.
+Autoridade final: as Escrituras. Diferencie observação, interpretação e aplicação. Evite alegorização arbitrária e sensacionalismo.
+
+TAREFA: a partir de uma profecia (tema + referência no Antigo Testamento + referência de cumprimento), produzir UMA ficha estruturada para um atlas de profecias bíblicas, considerando o gênero literário, o contexto histórico, literário e canônico, a progressão da revelação e a centralidade de Cristo.
+
+Responda SOMENTE com um objeto JSON válido — sem markdown, sem cercas de código, sem comentários, sem texto antes ou depois. Use exatamente estas chaves:
+
+{
+"tema":"título curto e claro da profecia",
+"categoria":"messianica | israel | nacoes | juizo | escatologica",
+"subcategoria":"ex.: Nascimento, Crucificação, Cativeiro, Babilônia, Juízo, Restauração, Segunda Vinda",
+"status":"cumprida | parcial | duplo | futura",
+"tipo":"ex.: Messiânica, Messiânica (Servo Sofredor), Sobre as nações, Escatológica",
+"alcance":"ex.: Primeiro Advento, Segundo Advento, Estado eterno, Histórico",
+"intervalo":"distância aproximada entre profecia e cumprimento, ex.: ≈ 700 anos",
+"at":{"livro":"","ref":"","profeta":"","data":"≈ ... a.C.","reino":"","rei":"",
+"contexto":"contexto histórico e político — no máximo 2 frases",
+"espiritual":"contexto espiritual/religioso — no máximo 2 frases"},
+"nt":{"livro":"","ref":"","governo":"","imperador":"",
+"natureza":"Literal | Parcial | Duplo cumprimento | Tipológico | —",
+"personagens":"principais envolvidos",
+"como":"como se cumpriu — no máximo 2 frases"},
+"obs":{"importancia":"importância teológica — no máximo 2 frases",
+"relacionadas":"referências relacionadas separadas por ponto e vírgula",
+"escatologia":"SOMENTE se categoria for escatologica: a leitura amilenista da Igreja Vidas em no máximo 2 frases; caso contrário use string vazia"}
+}
+
+Regras: português do Brasil; seja conciso (máx. 2 frases por campo de texto); use "≈" em datas aproximadas; para profecias ainda não cumpridas use status "futura", natureza "—" e nt.livro com a referência-alvo; se um dado for incerto, use o melhor consenso conservador sem inventar precisão falsa.
+Se a referência de cumprimento NÃO for informada (vier como "(a definir)"), identifique você mesmo o texto do Novo Testamento que cumpre a profecia e preencha nt.livro e nt.ref; se a profecia ainda não se cumpriu, marque status "futura" e indique em nt.livro/nt.ref o texto-alvo (do próprio AT, de Apocalipse ou de outro texto profético).`;
+
+const fab=document.getElementById('fab');
+const overlay=document.getElementById('overlay');
+const panelBody=document.getElementById('panelBody');
+let fichaGerada=null;
+
+/* ——— Conexão com o banco (leitura direta) e com o porteiro (gerar/gravar) ——— */
+async function carregarBanco(){
+  try{
+    const r=await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/profecias?select=*&order=n.asc`,{
+      headers:{ "apikey":CONFIG.SUPABASE_KEY }   // chave nova só vai no apikey, nunca no Authorization
+    });
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const rows=await r.json();
+    PROFECIAS = rows.map(row=>{ const f=row.dados||{}; if(row.n!=null) f.n=row.n; return f; });
+    MODO_OFFLINE=false;
+  }catch(err){
+    PROFECIAS = SEED.map(p=>({...p}));   // sem internet: mostra a semente embutida
+    MODO_OFFLINE=true;
+  }
+}
+function registroDe(f){ return { n:f.n, categoria:f.categoria||"", status:f.status||"cumprida", esboco:!!f.esboco, dados:f }; }
+async function salvarRegistros(registros){
+  const r=await fetch(`${CONFIG.WORKER_URL}/salvar`,{
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ pin:PIN_SESSAO, registros })
+  });
+  if(r.status===401){ PIN_SESSAO=""; throw new Error("PIN"); }
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return r.json();
+}
+
+/* ——— Tela de PIN ——— */
+const PIN_HTML=`
+  <div class="test-banner">🔒 <strong>Área restrita.</strong> Digite seu PIN para adicionar ou importar profecias.</div>
+  <div class="fld">
+    <label for="g-pin">PIN</label>
+    <input id="g-pin" type="password" inputmode="numeric" placeholder="••••••" autocomplete="off">
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" id="g-pin-ok">Entrar</button>
+    <button class="btn btn-line" id="g-pin-cancel">Cancelar</button>
+  </div>`;
+function telaPin(apos){
+  panelBody.innerHTML=PIN_HTML;
+  const inp=document.getElementById('g-pin');
+  document.getElementById('g-pin-cancel').onclick=fecharPainel;
+  const ok=()=>{ const v=inp.value.trim(); if(!v) return; PIN_SESSAO=v; apos(); };
+  document.getElementById('g-pin-ok').onclick=ok;
+  inp.onkeydown=e=>{ if(e.key==='Enter') ok(); };
+  setTimeout(()=>inp.focus(),60);
+}
+
+const FORM_HTML=`
+  <div class="fld">
+    <label for="g-tema">Tema da profecia</label>
+    <input id="g-tema" type="text" placeholder="Ex.: A ressurreição vencerá a morte">
+  </div>
+  <div class="fld-row">
+    <div class="fld">
+      <label for="g-at">Referência (Antigo Testamento)</label>
+      <input id="g-at" type="text" placeholder="Ex.: Oseias 13:14">
+    </div>
+    <div class="fld">
+      <label for="g-nt">Cumprimento / alvo <span style="color:var(--muted-dim);text-transform:none;letter-spacing:0">(opcional)</span></label>
+      <input id="g-nt" type="text" placeholder="Não sabe? Deixe em branco">
+    </div>
+  </div>
+  <div class="fld">
+    <label for="g-cat">Categoria</label>
+    <select id="g-cat">
+      <option value="messianica">Messiânica</option>
+      <option value="israel">Israel/Judá</option>
+      <option value="nacoes">Nações</option>
+      <option value="juizo">Juízo/Restauração</option>
+      <option value="escatologica">Escatológica</option>
+    </select>
+    <div class="hint">Se você não tiver a referência do cumprimento, deixe em branco: a IA identifica o texto do Novo Testamento (ou marca como futura, se ainda não cumprida). Voz batista tradicional e amilenista da Igreja Vidas.</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" id="g-gerar">✦ Gerar ficha</button>
+    <button class="btn btn-line" id="g-cancel">Cancelar</button>
+  </div>`;
+
+function abrirPainel(){
+  fichaGerada=null;
+  overlay.classList.add('show');
+  if(PIN_SESSAO) mostrarForm(); else telaPin(mostrarForm);
+}
+function mostrarForm(prefill, erro){
+  panelBody.innerHTML=FORM_HTML;
+  document.getElementById('g-cancel').onclick=fecharPainel;
+  document.getElementById('g-gerar').onclick=gerar;
+  if(prefill){
+    document.getElementById('g-tema').value=prefill.tema||'';
+    document.getElementById('g-at').value=prefill.at||'';
+    document.getElementById('g-nt').value=prefill.nt||'';
+    document.getElementById('g-cat').value=prefill.cat||'messianica';
+  }
+  if(erro){ const e=document.createElement('div'); e.className='err'; e.innerHTML=erro; panelBody.appendChild(e); }
+  setTimeout(()=>document.getElementById('g-tema').focus(),60);
+}
+function fecharPainel(){ overlay.classList.remove('show'); panelBody.innerHTML=''; }
+fab.onclick=abrirPainel;
+document.getElementById('panelClose').onclick=fecharPainel;
+overlay.addEventListener('click',e=>{ if(e.target===overlay) fecharPainel(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.contains('show')) fecharPainel(); });
+
+async function gerar(){
+  const tema=document.getElementById('g-tema').value.trim();
+  const refAT=document.getElementById('g-at').value.trim();
+  const refNT=document.getElementById('g-nt').value.trim();
+  const cat=document.getElementById('g-cat').value;
+  if(!tema||!refAT){ alert('Informe ao menos o tema e a referência no Antigo Testamento.'); return; }
+
+  panelBody.innerHTML=`<div class="loader"><div class="spinner"></div><div class="msg">Consultando as Escrituras e redigindo a ficha…</div></div>`;
+  const userMsg=`Profecia: ${tema}
+Referência no Antigo Testamento: ${refAT}
+Referência de cumprimento (Novo Testamento ou alvo): ${refNT||'(a definir)'}
+Categoria sugerida: ${cat}
+
+Gere a ficha em JSON, conforme o formato definido.`;
+
+  try{
+    const resp=await fetch(`${CONFIG.WORKER_URL}/gerar`,{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ pin:PIN_SESSAO, model:"claude-sonnet-4-6", max_tokens:1500, system:SYSTEM_FICHA, messages:[{role:"user",content:userMsg}] })
+    });
+    if(resp.status===401){ PIN_SESSAO=""; telaPin(()=>mostrarForm({tema,at:refAT,nt:refNT,cat},'PIN incorreto — digite novamente.')); return; }
+    const data=await resp.json();
+    let txt=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+    txt=txt.replace(/^```(json)?/i,'').replace(/```$/,'').trim();
+    const a=txt.indexOf('{'), b=txt.lastIndexOf('}');
+    if(a>=0&&b>a) txt=txt.slice(a,b+1);
+    const ficha=JSON.parse(txt);
+    ficha.categoria=ficha.categoria||cat;
+    fichaGerada=ficha;
+    mostrarPreview(ficha);
+  }catch(err){
+    mostrarForm({tema,at:refAT,nt:refNT,cat},
+      'Não consegui gerar a ficha agora. '+(String(err).includes('JSON')?'A resposta veio fora do formato — tente novamente.':'Verifique a conexão e tente de novo.'));
+  }
+}
+
+function linha(rotulo,valor){ return valor?`<div class="pv-line"><b>${rotulo}</b>${valor}</div>`:''; }
+
+function mostrarPreview(f){
+  const at=f.at||{}, nt=f.nt||{}, obs=f.obs||{};
+  panelBody.innerHTML=`
+    <div class="preview-head">Confira a ficha gerada</div>
+    <div class="pv">
+      <div class="pv-tema">${f.tema||'—'}</div>
+      <div class="pv-meta">${[f.tipo,f.status,f.alcance,f.intervalo].filter(Boolean).join(' · ')}</div>
+      <div class="pv-blk"><div class="pv-t">Antigo Testamento</div>
+        ${linha('Texto',[at.livro,at.ref].filter(Boolean).join(' '))}
+        ${linha('Profeta',at.profeta)} ${linha('Data',at.data)}
+        ${linha('Reino',at.reino)} ${linha('Rei',at.rei)}
+        ${linha('Contexto',at.contexto)} ${linha('Espiritual',at.espiritual)}
+      </div>
+      <div class="pv-blk"><div class="pv-t">Cumprimento</div>
+        ${linha('Texto',[nt.livro,nt.ref].filter(Boolean).join(' '))}
+        ${linha('Como',nt.como)} ${linha('Personagens',nt.personagens)}
+        ${linha('Governo',nt.governo)} ${linha('Imperador',nt.imperador)} ${linha('Natureza',nt.natureza)}
+      </div>
+      <div class="pv-blk"><div class="pv-t">Observações</div>
+        ${linha('Importância',obs.importancia)} ${linha('Relacionadas',obs.relacionadas)}
+        ${linha('Posição Igreja Vidas',obs.escatologia)}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" id="pv-ok">✓ Aprovar e salvar</button>
+      <button class="btn btn-ghost" id="pv-redo">↺ Gerar de novo</button>
+      <button class="btn btn-line" id="pv-cancel">Descartar</button>
+    </div>`;
+  document.getElementById('pv-ok').onclick=aprovar;
+  document.getElementById('pv-redo').onclick=()=>mostrarForm();
+  document.getElementById('pv-cancel').onclick=fecharPainel;
+}
+
+async function aprovar(){
+  if(!fichaGerada) return;
+  const prox=PROFECIAS.length?Math.max(...PROFECIAS.map(p=>p.n||0))+1:1;
+  fichaGerada.n=prox;
+  if(!['cumprida','parcial','duplo','messianica','futura'].includes(fichaGerada.status)) fichaGerada.status='cumprida';
+  const btn=document.getElementById('pv-ok'); if(btn){ btn.disabled=true; btn.textContent='Salvando…'; }
+  try{
+    await salvarRegistros([registroDe(fichaGerada)]);
+    await carregarBanco();
+    fecharPainel();
+    fCategoria='todas'; fStatus=null; fBusca='';
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.cat==='todas'));
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    document.getElementById('search').value='';
+    render();
+    abrir(prox);
+  }catch(err){
+    if(String(err.message)==="PIN"){ telaPin(()=>mostrarPreview(fichaGerada)); return; }
+    if(btn){ btn.disabled=false; btn.textContent='✓ Aprovar e salvar'; }
+    const e=document.createElement('div'); e.className='err'; e.textContent='Não consegui salvar agora. Confira o porteiro (Worker) e tente de novo.';
+    panelBody.appendChild(e);
+  }
+}
+
+async function importarSeed(){
+  panelBody.innerHTML=`<div class="loader"><div class="spinner"></div><div class="msg">Importando as 34 fichas iniciais…</div></div>`;
+  try{
+    await salvarRegistros(SEED.map(registroDe));
+    await carregarBanco();
+    fecharPainel();
+    render();
+  }catch(err){
+    if(String(err.message)==="PIN"){ telaPin(importarSeed); return; }
+    fecharPainel();
+    alert('Não consegui importar agora. Confira o porteiro (Worker) e tente de novo.');
+  }
+}
+
+/* ——— Inicialização ——— */
+(async function init(){
+  await carregarBanco();
+  render();
+})();
+</script>
+</body>
+</html>
